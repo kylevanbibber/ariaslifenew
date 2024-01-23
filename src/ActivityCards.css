@@ -1,0 +1,140 @@
+*,
+*:after,
+*:before {
+    box-sizing: border-box;
+}
+
+:root {
+    --radius: 8px;
+    --border: 3px;  /* Adjust border thickness */
+    --height: 15px; /* Adjust height for the tabs */
+    --speed: 0.25s;
+    --ease: ease;
+}
+
+.header-with-toggle {
+    display: flex;
+    justify-content: space-between; /* This will space out the children */
+    align-items: center;
+    width: 100%; /* Ensure the container takes the full width */
+    margin-bottom: 10px;
+}
+
+.tabs {
+    display: grid;
+    grid-auto-flow: column;
+    background: hsl(0 0% 0%);
+    border-radius: var(--radius);
+    grid-auto-columns: minmax(60px, auto); /* Adjust width of each tab */
+    position: relative;
+    border: var(--border) solid hsl(0, 0%, 0%);
+    --count: 2; /* Two options: Sum and Average */
+}
+
+
+.tabs > input,
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.tabs:has(:checked:nth-of-type(1)) { --active: 0; }
+.tabs:has(:checked:nth-of-type(2)) { --active: 1; }
+
+.tabs label {
+    padding: 2px;
+    cursor: pointer;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    color: hsl(0 0% 100%);
+    transition: background, color 0.25s;
+    transition-timing-function: var(--ease, ease);
+}
+
+input:not(:checked) + label:hover {
+    background: hsl(0 0% 20%);
+}
+
+.tabs::after {
+    content: "";
+    width: calc(100% / var(--count));
+    height: 100%;
+    background: hsl(0 0% 100%);
+    position: absolute;
+    border-radius: calc(var(--radius) - var(--border));
+    mix-blend-mode: difference;
+    translate: calc(var(--active, 0) * 100%) 0;
+    transition: translate var(--speed) var(--ease);
+    outline: 2px solid transparent;
+}
+
+.tabs:has(:focus-visible)::after {
+    outline: 2px solid red;
+}
+.card {
+    position: relative;
+    padding: 1rem;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    box-shadow: 0 1rem 2rem -1rem rgba(0, 0, 0, 0.415);
+    border: 1px solid hsla(0, 0%, 0%, 0.279);
+    backdrop-filter: blur(15px);
+    border-radius: 14px;
+    background: hsl(0, 0%, 100%);
+    color: rgb(0, 0, 0);
+    --border: 3px;
+    --size: 200px;
+    --base: 80;
+    --spread: 500;
+    transition: box-shadow 0.5s;
+}
+
+[data-glow] {
+    position: relative;
+}
+
+[data-glow]:hover::before,
+[data-glow]:hover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        calc(var(--size) * 0.5) at var(--x) var(--y),
+        hsl(var(--base) 20% 20% / 0.2), transparent
+    );
+    background-size: 100% 100%;
+    background-position: center;
+    background-attachment: fixed;
+    mix-blend-mode: overlay;
+}
+
+[data-glow]:hover {
+    box-shadow: 0 0 15px #014da4; /* Updated box shadow color */
+}
+
+[data-glow]::before {
+    mix-blend-mode: overlay;
+}
+
+[data-glow]::after {
+    mix-blend-mode: color-dodge;
+}
+
+.counter {
+    display: inline-flex;
+    font-family: "Geist Sans", sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+.digit {
+    padding: 0 0.1rem;
+}

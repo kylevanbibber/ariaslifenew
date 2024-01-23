@@ -1,0 +1,163 @@
+.form-container {
+    max-width: 650px;
+    min-width: 500px;
+    margin: auto;
+    padding: 30px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.label-row, .input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.common-label {
+    flex: 1; /* Makes each label take equal width */
+    text-align: center;
+}
+.empty-header {
+    width: 100px; /* Adjust based on the size of your section headers */
+}
+.section-header {
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    width: 100px;
+    text-align: center;
+}
+.row-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjust the spacing as needed */
+    gap: 20px; /* Space between the two sections */
+}
+.radio-buttons {
+    display: flex; /* Align radio buttons in a row */
+    align-items: center; /* Vertically center items in the row */
+    gap: 5px; /* Space between each radio button and label */
+    margin-left: 10px;
+}
+
+.field-group-horizontal, .input-field-group {
+    flex: 1; /* Each section takes equal width */
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dropdown-group {
+    display: flex;
+    justify-content: space-between; /* Adjust this as needed */
+    gap: 10px; /* Space between dropdowns */
+    flex-wrap: wrap; /* Wrap onto the next line on smaller screens */
+}
+
+/* Style for dropdown label and select box container */
+.dropdown-field-group {
+    display: flex;
+    align-items: center; /* Align label and select box */
+    gap: 5px; /* Space between label and select box */
+    flex: 1; /* Make each dropdown group take equal width */
+}
+.field-group-horizontal {
+    display: flex;
+    align-items: center; /* Align label and input field */
+    gap: 5px; /* Space between label and input field */
+    margin-bottom: 15px; /* Space below each field group */
+}
+.input-field-group {
+    display: flex;
+    flex-direction: row; /* Stack elements vertically */
+    justify-content: center; /* Center elements vertically */
+    flex: 1; /* Allocate equal space */
+}
+
+.input-field-group label {
+    margin-bottom: 5px;
+}
+
+.input-field {
+    padding: 4px;
+    border: 2px solid #00000060;
+    border-radius: 4px;
+    width: 100%; /* Full width of the container */
+    text-align: center; /* Center the text in inputs */
+    max-width: 496px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    /* Remove spinner buttons from number inputs */
+    -moz-appearance: textfield;
+}
+.input-field::-webkit-outer-spin-button,
+.input-field::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.section {
+margin-top: 20px;
+margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures that borders between cells look continuous */
+    margin-top: 30px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button {
+    background-color: #319B42;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: block; /* Make the button a block element */
+    margin: 20px auto; /* Center the button */
+}
+
+.submit-button:hover {
+    background-color: #226c2e;
+}
+
+@media (max-width: 600px) {
+    .form-container {
+        max-width: 90%; /* Allow the container to be more flexible */
+        min-width: initial; /* Remove the fixed minimum width */
+        padding: 15px; /* Match the regular version padding */
+    }
+
+    .label-row, .input-row, .row-container, .dropdown-group, .field-group-horizontal {
+        flex-direction: row; /* Keep elements in a row */
+        flex-wrap: nowrap; /* Prevent wrapping */
+    }
+
+    .section-header, .common-label, .empty-header {
+        width: 125px; /* Match the regular version width */
+    }
+
+    .input-field-group, .radio-buttons, .checkbox-group label {
+        flex-direction: row; /* Keep elements in a row */
+        justify-content: flex-start; /* Align elements to the start */
+    }
+
+    .input-field-group label, .common-label {
+        margin-right: 5px; /* Space between label and field */
+    }
+
+    .input-field, .input-field-date {
+        width: 100%; /* Adjust width to content */
+    }
+
+    .submit-button {
+        padding: 10px 15px; /* Match regular version padding */
+        font-size: 16px; /* Match regular version font size */
+    }
+}
