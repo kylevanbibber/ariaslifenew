@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import Production from './components/Production';
@@ -7,6 +7,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
+    useEffect(() => {
+        // Check if the user is authenticated
+        const jwtToken = localStorage.getItem('jwtToken');
+
+        if (!jwtToken) {
+            // User is not authenticated, redirect to the login page
+            window.location.href = 'https:www.ariaslife.com/agents/login.html'; // Replace with your login URL
+        }
+        // Add any other conditions or handling as needed
+
+    }, []);
+
     return (
         <Router>
             <Navbar />
