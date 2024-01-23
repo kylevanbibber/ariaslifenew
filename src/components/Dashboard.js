@@ -11,14 +11,22 @@ import ReportActivityForm from './ReportActivityForm';
 
 
 function Dashboard() {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    const currentDateTime = new Date();
+    const currentHour = currentDateTime.getHours();
 
-    // Initialize the dateRange state with yesterday's date
+    // Determine if the current time is before 7 PM (19:00 hours in 24-hour format)
+    const isBefore7PM = currentHour < 19;
+
+    // Set initial date to yesterday if before 7 PM, otherwise set it to today
+    const initialDate = new Date();
+    if (isBefore7PM) {
+        initialDate.setDate(initialDate.getDate() - 1);
+    }
+
     const [dateRange, setDateRange] = useState([
         {
-            startDate: yesterday,
-            endDate: yesterday,
+            startDate: initialDate,
+            endDate: initialDate,
             key: 'selection',
         },
     ]);

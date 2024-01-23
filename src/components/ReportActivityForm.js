@@ -3,8 +3,9 @@ import '../ReportActivityForm.css';
 
 function ReportActivityForm() {
     // State variables for form fields
-    const currentDate = new Date().toISOString().split('T')[0];
-    const [reportDate, setReportDate] = useState(new Date().toISOString().split('T')[0]);
+    const currentDate = new Date().toLocaleDateString('en-CA'); // Format YYYY-MM-DD
+    const [reportDate, setReportDate] = useState(currentDate);
+    
     const [mga, setMga] = useState('');
     const [agent, setAgent] = useState('');
     const [mgas, setMgas] = useState([]);
