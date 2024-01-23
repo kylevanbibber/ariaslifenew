@@ -3,7 +3,7 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import logo from '../img/globe1.png'; // Adjust the path as necessary
 
 function CustomNavbar() {
-    
+
     return (
         <Navbar collapseOnSelect expand="md" style={{ backgroundColor: "#00558C", boxShadow: "0px 0px 11px 2px rgba(33,37,41,0.25)" }}>
             <Container>
@@ -26,8 +26,23 @@ function CustomNavbar() {
                         </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Nav.Link href="ariaslife.com/agents/login.html" style={{ background: "var(--bs-secondary)", color: "var(--bs-white)" }}>Logout</Nav.Link>
-                    </Nav>
+                    <Nav.Link
+    className="dashboard-button" // Apply the dashboard-button class
+    href="https://ariaslife.com/agents/login.html" // Provide the complete URL
+    style={{
+        background: '#28a745', // Green background
+        color: 'white', // White text color
+        border: 'none',
+        borderRadius: '5px', // Rounded corners
+        padding: '5px 10px',
+        fontSize: '1rem',
+        textDecoration: 'none', // Removes underline
+    }}
+>
+    Logout
+</Nav.Link>
+
+                        </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
