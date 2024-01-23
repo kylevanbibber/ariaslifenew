@@ -16,7 +16,7 @@ function CustomNavbar() {
                         <Nav.Link href="careers.html" style={{ color: "var(--bs-white)" }}>Training</Nav.Link>
                         <Nav.Link href="locations.html" style={{ color: "var(--bs-white)" }}>Production</Nav.Link>
                         <Nav.Link href="products.html" style={{ color: "var(--bs-white)" }}>Leadership Development</Nav.Link>
-                        <NavDropdown title="Agent Sites" id="collasible-nav-dropdown" style={{ color: "var(--bs-tertiary-bg)" }}>
+                        <NavDropdown title="Agent Sites" id="collasible-nav-dropdown" style={{ color: "var(--bs-white)" }}>
                             <NavDropdown.Item href="https://arc.ailife.com/login.aspx?ReturnUrl=%2f" target="_blank">ARC</NavDropdown.Item>
                             <NavDropdown.Item href="https://login.ailife.com/ImpactMobile/" target="_blank">Impact Mobile</NavDropdown.Item>
                             <NavDropdown.Item href="https://login.ailife.com/ImpactPortal/" target="_blank">Impact AWS</NavDropdown.Item>
@@ -25,7 +25,7 @@ function CustomNavbar() {
                         </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Nav.Link href="admin_login.html" style={{ background: "var(--bs-secondary)", color: "var(--bs-white)" }}>Logout</Nav.Link>
+                        <Nav.Link href="ariaslife.com/agents/login.html" style={{ background: "var(--bs-secondary)", color: "var(--bs-white)" }}>Logout</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
