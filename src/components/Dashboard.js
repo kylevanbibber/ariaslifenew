@@ -8,7 +8,7 @@ import DateRangeDisplay from './DateRangeDisplay'; // Import the new component
 import StatisticsCards from './StatisticsCards';
 import Modal from './Modal';
 import ReportActivityForm from './ReportActivityForm';
-
+import TickerInput from './Ticker';
 
 function Dashboard() {
     const currentDateTime = new Date();
@@ -88,7 +88,6 @@ function Dashboard() {
         </div>
     )}
 </div>
-
 
             <ActivityCards dateRange={dateRange} />
             <StatisticsCards dateRange={dateRange} />

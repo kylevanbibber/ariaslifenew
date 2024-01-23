@@ -1,0 +1,39 @@
+.activity-input-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.ticker-input {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ticker-input label {
+    font-weight: bold;
+}
+
+.ticker-input button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.ticker-input button:hover {
+    background-color: #0056b3;
+}
+
+.ticker-input input {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

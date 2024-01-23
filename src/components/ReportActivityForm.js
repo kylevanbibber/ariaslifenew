@@ -228,6 +228,8 @@ function ReportActivityForm() {
                                             value={hardCardSits}
                                             onChange={(e) => setHardCardSits(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -238,6 +240,8 @@ function ReportActivityForm() {
                                             value={hardCardSales}
                                             onChange={(e) => setHardCardSales(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -248,6 +252,8 @@ function ReportActivityForm() {
                                             value={hardCardAlp}
                                             onChange={(e) => setHardCardAlp(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                 </div>
@@ -277,6 +283,8 @@ function ReportActivityForm() {
                                             value={posSits}
                                             onChange={(e) => setPosSits(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -287,6 +295,8 @@ function ReportActivityForm() {
                                             value={posSales}
                                             onChange={(e) => setPosSales(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -297,6 +307,8 @@ function ReportActivityForm() {
                                             value={posAlp}
                                             onChange={(e) => setPosAlp(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                 </div>
@@ -326,6 +338,8 @@ function ReportActivityForm() {
                                             value={referralSits}
                                             onChange={(e) => setReferralSits(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -336,6 +350,8 @@ function ReportActivityForm() {
                                             value={referralSales}
                                             onChange={(e) => setReferralSales(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -346,6 +362,8 @@ function ReportActivityForm() {
                                             value={referralAlp}
                                             onChange={(e) => setReferralAlp(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                 </div>
@@ -375,6 +393,8 @@ function ReportActivityForm() {
                                             value={vendorSits}
                                             onChange={(e) => setVendorSits(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -385,6 +405,8 @@ function ReportActivityForm() {
                                             value={vendorSales}
                                             onChange={(e) => setVendorSales(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                     <div className="input-field-group">
@@ -395,6 +417,8 @@ function ReportActivityForm() {
                                             value={vendorAlp}
                                             onChange={(e) => setVendorAlp(e.target.value)}
                                             className="input-field"
+                                            onFocus={(e) => e.target.select()}
+
                                         />
                                     </div>
                                 </div>
@@ -422,6 +446,8 @@ function ReportActivityForm() {
                     onChange={(e) => setTotalCalls(Number(e.target.value))}
                     disabled={didWork === 'no'}
                     className="input-field" // Apply the input-field class
+                    onFocus={(e) => e.target.select()}
+
                 />
             </td>
             <td>
@@ -463,6 +489,8 @@ function ReportActivityForm() {
                     onChange={(e) => setTotalRefs(Number(e.target.value))}
                     disabled={didWork === 'no'}
                     className="input-field" // Apply the input-field class
+                    onFocus={(e) => e.target.select()}
+
                 />
             </td>
         </tr>
