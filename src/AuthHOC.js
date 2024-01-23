@@ -5,17 +5,16 @@ import React, { useEffect } from 'react';
 const AuthHOC = (WrappedComponent) => {
   const AuthenticatedComponent = (props) => {
     useEffect(() => {
-      // Check if the user is authenticated
       const jwtToken = localStorage.getItem('jwtToken');
-      
+      console.log("JWT Token:", jwtToken); // Log the token for debugging
+
       if (!jwtToken) {
-        // User is not authenticated, redirect to the login page
-        window.location.href = 'https://ariaslife.com/agents/login.html'; // Replace with your login URL
+        console.log("Redirecting to login"); // Log redirection
+        window.location.href = 'https://ariaslife.com/agents/login.html';
       }
-      // Add any other conditions or handling as needed
     }, []);
 
-    // Render the wrapped component if authenticated
+    console.log("Rendering WrappedComponent"); // Log rendering of the component
     return <WrappedComponent {...props} />;
   };
 
