@@ -13,7 +13,7 @@ function App() {
 
         if (!jwtToken) {
             // User is not authenticated, redirect to the login page
-            window.location.href = 'https:www.ariaslife.com/agents/login.html'; // Replace with your login URL
+            window.location.href = 'https://ariaslife.com/agents/login.html'; // Replace with your login URL
         }
         // Add any other conditions or handling as needed
 

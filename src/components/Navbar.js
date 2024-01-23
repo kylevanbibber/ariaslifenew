@@ -38,9 +38,14 @@ function CustomNavbar() {
         fontSize: '1rem',
         textDecoration: 'none', // Removes underline
     }}
+    onClick={() => {
+        // Clear JWT token from local storage
+        localStorage.removeItem('jwtToken');
+    }}
 >
     Logout
 </Nav.Link>
+
 
                         </Nav>
                 </Navbar.Collapse>
