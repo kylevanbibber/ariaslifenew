@@ -35,18 +35,19 @@ const StatisticsCards = ({ dateRange }) => {
 
     const filterDataByDateRange = (data, dateRange) => {
         let startDate = new Date(dateRange[0].startDate);
-        startDate.setDate(startDate.getDate() - 1);
-
         let endDate = new Date(dateRange[0].endDate);
-        endDate.setDate(endDate.getDate() - 1);
-        endDate.setDate(endDate.getDate() + 1);
-
+    
+        // Convert start and end dates to UTC
+        startDate = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()));
+        endDate = new Date(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59));
+    
         return data.filter((row, index) => {
             if (index === 0) return false;
-            const itemDate = new Date(row[0]);
-            return itemDate >= startDate && itemDate < endDate;
+            const itemDate = new Date(row[0] + 'T00:00:00Z'); // Parse as UTC
+            return itemDate >= startDate && itemDate <= endDate;
         });
     };
+    
 
     const processData = (data) => {
         const stats = {
