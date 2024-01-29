@@ -150,6 +150,25 @@ function ReportActivityForm() {
         }
     };
     
+    useEffect(() => {
+        // Function to handle the message event
+        const handleFormSubmitResponse = (event) => {
+            // Check if the message is 'success'
+            if (event.data === 'success') {
+                // Handle successful submission
+                console.log('Form submitted successfully');
+                // You can add more logic here, like showing a success message to the user
+            }
+        };
+
+        // Add event listener for message events
+        window.addEventListener('message', handleFormSubmitResponse);
+
+        // Cleanup function to remove the event listener
+        return () => {
+            window.removeEventListener('message', handleFormSubmitResponse);
+        };
+    }, []);
     
     useEffect(() => {
         console.log("MGA changed to:", mga);
@@ -219,38 +238,15 @@ const handleSubmit = async (event) => {
         }
     };
 
-    // Determine the App Script URL based on the MGA (if needed)
-    // const appScriptUrl = getAppScriptUrl(mga); // Implement this function based on your logic
-
-    // Example App Script URL (replace with your actual URL)
-    const appScriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
-
-    // Send data to Google App Script
-    try {
-        const response = await fetch(appScriptUrl, {
-            method: 'POST',
-            body: JSON.stringify(formData),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const result = await response.json();
-        console.log('Form submitted successfully', result);
-        // Handle success (e.g., showing a success message)
-    } catch (error) {
-        console.error('Error submitting form', error);
-        // Handle error (e.g., showing an error message)
-    }
 };
 
 
     return (
         <div className="form-container">
             <form 
-                action="https://script.google.com/macros/s/AKfycbzbePjEbK9v73P5XOHyFLyDalDWXJve11_zLvaA-t1kyfsRVmgesyqhWSIaAFuC9RN1/exec" // Replace with your Web App URL
+                action="https://script.google.com/macros/s/AKfycbwitdHJITU-8aBBc6FlZPy9jfUFdvoKN_A9tzsRhtPj7ooK3CXdDwNMUfymC0OZDHKR/exec" // Your Web App URL
                 method="POST"
-                target="hidden_iframe" // Optional: If you want to handle the response in an iframe
-                onSubmit={handleSubmit}
+                target="hidden_iframe" // Using iframe to handle the response without reloading the page
             >
 
 
@@ -262,6 +258,7 @@ const handleSubmit = async (event) => {
         <select
             id="mga"
             value={mga}
+            name='mga'
             onChange={(e) => setMga(e.target.value)}
             className="input-field"
         >
@@ -274,6 +271,7 @@ const handleSubmit = async (event) => {
         <select
             id="agent"
             value={agent}
+            name='agent'
             onChange={(e) => setAgent(e.target.value)}
             className="input-field"
         >
@@ -290,6 +288,7 @@ const handleSubmit = async (event) => {
         type="date"
         id="reportDate"
         value={reportDate}
+        name='reportDate'
         onChange={(e) => setReportDate(e.target.value)}
         max={currentDate} // Set the max attribute to the current date
         className="input-field"
