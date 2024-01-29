@@ -8,7 +8,8 @@ import DateRangeDisplay from './DateRangeDisplay'; // Import the new component
 import StatisticsCards from './StatisticsCards';
 import Modal from './Modal';
 import ReportActivityForm from './ReportActivityForm';
-
+import MaxBonus from './MaxBonus';
+import { TickerInput } from './Ticker';
 function Dashboard() {
     const currentDateTime = new Date();
     const currentHour = currentDateTime.getHours();
@@ -67,6 +68,7 @@ function Dashboard() {
                 Verification Survey
                 </a>
             </div>
+<MaxBonus />
             <div className="date-picker-group">
     <DateRangeDisplay
         startDate={dateRange[0].startDate}
@@ -87,7 +89,6 @@ function Dashboard() {
         </div>
     )}
 </div>
-
             <ActivityCards dateRange={dateRange} />
             <StatisticsCards dateRange={dateRange} />
         </div>

@@ -142,9 +142,9 @@ const animateValue = (start, end, duration) => {
                 <h4>Activity</h4>
                 <div className="tabs">
                     <input type="radio" id="sum" name="calculation_type" value="Sum" checked={!showAverage} onChange={handleToggle} />
-                    <label for="sum">Sum</label>
+                    <label htmlFor="sum">Sum</label>
                     <input type="radio" id="average" name="calculation_type" value="Average" checked={showAverage} onChange={handleToggle} />
-                    <label for="average">Avg</label>
+                    <label htmlFor="average">Avg</label>
                 </div>
             </div>
         <div className="cards-row">

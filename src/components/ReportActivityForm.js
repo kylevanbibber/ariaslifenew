@@ -6,11 +6,14 @@ function ReportActivityForm() {
     const currentDate = new Date().toLocaleDateString('en-CA'); // Format YYYY-MM-DD
     const [reportDate, setReportDate] = useState(currentDate);
     
-    const [mga, setMga] = useState('');
-    const [agent, setAgent] = useState('');
-    const [mgas, setMgas] = useState([]);
-    const agents = ['Agent 1', 'Agent 2', 'Agent 3'];
 
+    const [mgas, setMgas] = useState([]);
+    const [agents, setAgents] = useState([]); // Initialize with an empty array
+    const [mga, setMga] = useState(localStorage.getItem('selectedMGA') || '');
+    const [agent, setAgent] = useState(localStorage.getItem('selectedAgent') || '');
+    const [rga, setRga] = useState('');
+    const [legacy, setLegacy] = useState('');
+    const [tree, setTree] = useState('');
     const [didWork, setDidWork] = useState('yes'); // Default to 'yes'
 
     // State variables for Hard Card details
@@ -80,9 +83,9 @@ function ReportActivityForm() {
             // Focus on the first checkbox
         }
     };
-    const fetchData = async () => {
-        const sheetId = '1OIHKR6KyA5gLrNSTQVff6_g1DMzsjppQxTAgfJvh7Ks';
-        const range = 'MGA/RGA!A:A'; // Assuming MGA names are in column A
+    const mgaSheetId = '1OIHKR6KyA5gLrNSTQVff6_g1DMzsjppQxTAgfJvh7Ks'; // Declare it in the global scope
+
+    const fetchData = async (sheetId, range) => {
         const apiKey = 'AIzaSyAUQ8D5K1kc2CBTEd0RM3WUOhcI5OJGydg';
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(range)}?key=${apiKey}`;
 
@@ -90,41 +93,181 @@ function ReportActivityForm() {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const data = await response.json();
-        return data.values;
+        return await response.json();
     };
-
+    const sheetIdMapping = {
+        'Adams': '1fxXePNEiavzMtjqf-Jm5NiY2ZfbtzlYv5-JCsno5diA',
+        'Agency': '1W3NRrXyPD9j6jhtApGeckJ78yFN6jN7XNApCJwyAzHM',
+        'Evanson': '17BTz3XlktDr47kJgvMMfl4C91ClVI23GRry9s4L2Yg8',
+        // Add more mappings as needed
+    };
+    
+    const fetchAgentsForSelectedMGA = async (selectedMGA) => {
+        console.log("Selected MGA:", selectedMGA);
+    
+        if (selectedMGA) {
+            // Fetch the entire MGA/RGA range
+            const response = await fetchData(mgaSheetId, 'MGA/RGA!A:D');
+            const selectedMgaRow = response.values.find(row => row[0] === selectedMGA);
+    
+            if (selectedMgaRow) {
+                // Set the RGA, Legacy, and Tree values
+                setRga(selectedMgaRow[1] || ''); // Column B
+                setLegacy(selectedMgaRow[2] || ''); // Column C
+                setTree(selectedMgaRow[3] || ''); // Column D
+    
+                // Fetch agents based on the MGA's sheet indicator in Column D
+                const agentSheetId = sheetIdMapping[selectedMgaRow[3]];
+                if (agentSheetId) {
+                    const agentRange = 'ActiveAgentsEmails!B:D';
+                    try {
+                        const response = await fetchData(agentSheetId, agentRange);
+                        console.log("Agent data response:", response);
+    
+                        if (response && response.values && response.values.length > 0) {
+                            const uniqueAgentNames = new Set();
+                            const agentData = response.values
+                                .slice(1) // Skip the first row (header)
+                                .filter(row => {
+                                    const agentName = row[0];
+                                    if (!uniqueAgentNames.has(agentName)) {
+                                        uniqueAgentNames.add(agentName);
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                .sort((a, b) => a[0].localeCompare(b[0])); // Sort alphabetically
+    
+                            const formattedAgentNames = agentData.map(row => `${row[0]} - ${row[2]}`);
+                            console.log("Formatted agent names:", formattedAgentNames);
+                            setAgents(formattedAgentNames);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching agents:', error);
+                    }
+                }
+            }
+        }
+    };
+    
+    
     useEffect(() => {
-        fetchData().then(rawData => {
-            // Assuming each row in rawData is an array with the first element being the MGA name
-            const fetchedMgas = rawData.map(row => row[0]);
-            setMgas(fetchedMgas);
+        console.log("MGA changed to:", mga);
+        if (mga) {
+            fetchAgentsForSelectedMGA(mga);
+        }
+    }, [mga, mgas]);
+    // Effect to update local storage when MGA or Agent changes
+    useEffect(() => {
+        localStorage.setItem('selectedMGA', mga);
+        localStorage.setItem('selectedAgent', agent);
+    }, [mga, agent]);
+    useEffect(() => {
+        console.log('Fetching MGA data...');
+        const mgaSheetId = '1OIHKR6KyA5gLrNSTQVff6_g1DMzsjppQxTAgfJvh7Ks';
+        const mgaRange = 'MGA/RGA!A:D'; // Only fetch column A
+        fetchData(mgaSheetId, mgaRange).then(data => {
+            console.log('MGA data:', data.values);
+            setMgas(data.values.map(row => row[0])); // Store only MGA names
         }).catch(error => {
             console.error('Error fetching MGA data:', error);
         });
     }, []);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Form submission logic
-        const formData = {
-            agent, reportDate,
-            hardCardDetails: { hardCardAppts, hardCardSits, hardCardSales, hardCardAlp },
-            posDetails: { posAppts, posSits, posSales, posAlp },
-            referralDetails: { referralAppts, referralSits, referralSales, referralAlp },
-            vendorDetails: { vendorAppts, vendorSits, vendorSales, vendorAlp }
-        };
-        console.log(formData);
+const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+
+    // Gather all form data
+    const formData = {
+        mga,
+        agent: agent,
+        reportDate,
+        rga,
+        legacy,
+        tree,
+        hardCardDetails: {
+            appts: hardCardAppts,
+            sits: hardCardSits,
+            sales: hardCardSales,
+            alp: hardCardAlp
+        },
+        posDetails: {
+            appts: posAppts,
+            sits: posSits,
+            sales: posSales,
+            alp: posAlp
+        },
+        referralDetails: {
+            appts: referralAppts,
+            sits: referralSits,
+            sales: referralSales,
+            alp: referralAlp
+        },
+        vendorDetails: {
+            appts: vendorAppts,
+            sits: vendorSits,
+            sales: vendorSales,
+            alp: vendorAlp
+        },
+        totals: {
+            calls: totalCalls,
+            appts: totalAppts,
+            sits: totalSits,
+            sales: totalSales,
+            alp: totalAlp,
+            refs: totalRefs
+        }
     };
+
+    // Determine the App Script URL based on the MGA (if needed)
+    // const appScriptUrl = getAppScriptUrl(mga); // Implement this function based on your logic
+
+    // Example App Script URL (replace with your actual URL)
+    const appScriptUrl = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+    // Send data to Google App Script
+    try {
+        const response = await fetch(appScriptUrl, {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const result = await response.json();
+        console.log('Form submitted successfully', result);
+        // Handle success (e.g., showing a success message)
+    } catch (error) {
+        console.error('Error submitting form', error);
+        // Handle error (e.g., showing an error message)
+    }
+};
+
 
     return (
         <div className="form-container">
-            <form onSubmit={handleSubmit}>
-
+            <form 
+                action="https://script.google.com/macros/s/AKfycbzbePjEbK9v73P5XOHyFLyDalDWXJve11_zLvaA-t1kyfsRVmgesyqhWSIaAFuC9RN1/exec" // Replace with your Web App URL
+                method="POST"
+                target="hidden_iframe" // Optional: If you want to handle the response in an iframe
+                onSubmit={handleSubmit}
+            >
 
 
 {/* Agent and MGA Dropdowns */}
 <div className="dropdown-group">
+        {/* MGA Dropdown */}
+        <div className="dropdown-field-group">
+        <label htmlFor="mga">MGA:</label>
+        <select
+            id="mga"
+            value={mga}
+            onChange={(e) => setMga(e.target.value)}
+            className="input-field"
+        >
+            {mgas.map(m => <option key={m} value={m}>{m}</option>)}
+        </select>
+    </div>
     {/* Agent Dropdown */}
     <div className="dropdown-field-group">
         <label htmlFor="agent">Agent:</label>
@@ -138,18 +281,7 @@ function ReportActivityForm() {
         </select>
     </div>
 
-    {/* MGA Dropdown */}
-    <div className="dropdown-field-group">
-        <label htmlFor="mga">MGA:</label>
-        <select
-            id="mga"
-            value={mga}
-            onChange={(e) => setMga(e.target.value)}
-            className="input-field"
-        >
-            {mgas.map(m => <option key={m} value={m}>{m}</option>)}
-        </select>
-    </div>
+
 </div>
 {/* Report Date Input */}
 <div className="dropdown-field-group">
@@ -193,9 +325,14 @@ function ReportActivityForm() {
         <label htmlFor="workNo">No</label>
     </div>
 </div>
-
+<div>
+                    <input type="hidden" id="rga" name="rga" value={rga} />
+                    <input type="hidden" id="legacy" name="legacy" value={legacy} />
+                    <input type="hidden" id="tree" name="tree" value={tree} />
+                </div>
                 {didWork === 'yes' && (
                     <div>
+                        
 <div className="section">
                 {/* Common Labels */}
                 <div className="label-row">
@@ -207,8 +344,8 @@ function ReportActivityForm() {
                 </div>
                         {/* Hard Card Section */}
                             <div>
-                                <div className="input-row">
-                                <div className="section-header">Hard Card</div>
+                                <div className="input-row" style={{ backgroundColor: "#00548c", paddingRight: "3px", marginBottom: "5px"}}>
+                                <div className="section-header" style={{ color: "white"}}>Hard Card</div>
                                     <div className="input-field-group">
                                         <label htmlFor="hardCardAppts"></label>
                                         <input
@@ -262,8 +399,8 @@ function ReportActivityForm() {
 
                         {/* POS Section */}
                             <div>
-                                <div className="input-row">
-                                <div className="section-header">POS</div>
+                                <div className="input-row" style={{ backgroundColor: "#ED722F", paddingRight: "3px", marginBottom: "5px"}}>
+                                <div className="section-header" style={{ color: "white"}}>POS</div>
                                     <div className="input-field-group">
                                         <label htmlFor="posAppts"></label>
                                         <input
@@ -317,8 +454,8 @@ function ReportActivityForm() {
 
                         {/* Referral Section */}
                             <div>
-                                <div className="input-row">
-                                <div className="section-header">Referral</div>
+                                <div className="input-row" style={{ backgroundColor: "#B25271", paddingRight: "3px", marginBottom: "5px"}}>
+                                <div className="section-header" style={{ color: "white"}}>Referral</div>
                                     <div className="input-field-group">
                                         <label htmlFor="referralAppts"></label>
                                         <input
@@ -372,8 +509,8 @@ function ReportActivityForm() {
 
                         {/* Vendor Section */}
                             <div>
-                                <div className="input-row">
-                                <div className="section-header">Vendor</div>
+                                <div className="input-row" style={{ backgroundColor: "#319B42", paddingRight: "3px", marginBottom: "3px"}}>
+                                <div className="section-header" style={{ color: "white"}}>Vendor</div>
                                     <div className="input-field-group">
                                         <label htmlFor="vendorAppts"></label>
                                         <input
@@ -429,12 +566,12 @@ function ReportActivityForm() {
 <table>
     <thead>
         <tr>
-            <th>Calls</th>
-            <th>Appts</th>
-            <th>Sits</th>
-            <th>Sales</th>
-            <th>ALP</th>
-            <th>Refs</th>
+            <th className="top-table-header" style={{ backgroundColor: "#00548c" }}>Calls</th>
+            <th className="top-table-header" style={{ backgroundColor: "#00548c" }}>Appts</th>
+            <th className="top-table-header" style={{ backgroundColor: "#00548c" }}>Sits</th>
+            <th className="top-table-header" style={{ backgroundColor: "#00548c" }}>Sales</th>
+            <th className="top-table-header" style={{ backgroundColor: "#00548c" }}>ALP</th>
+            <th className="top-table-header" style={{ backgroundColor: "#00548c" }}>Refs</th>
         </tr>
     </thead>
     <tbody>
@@ -499,6 +636,7 @@ function ReportActivityForm() {
 
                 <input type="submit" value="Submit" className="submit-button" />
             </form>
+            <iframe name="hidden_iframe" id="hidden_iframe" style={{display: 'none'}}></iframe> {/* Optional iframe for handling responses */}
         </div>
     );
 };
